@@ -1,0 +1,30 @@
+{
+  "name": "LifeFit",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx --watch src/index.ts"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.28.1",
+  "dependencies": {
+    "@types/node": "^25.5.0",
+    "dotenv": "^17.3.1",
+    "fastify": "^5.8.4",
+    "typescript": "^6.0.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.1.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.4.0",
+    "tsx": "^4.21.0",
+    "typescript-eslint": "^8.57.2"
+  }
+}
