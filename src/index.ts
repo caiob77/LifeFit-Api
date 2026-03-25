@@ -2,9 +2,7 @@ import 'dotenv/config'
 import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod'
 import fastify from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
-import { z } from 'zod'
 import fastifySwagger from '@fastify/swagger'
-import fastifySwaggerUi from '@fastify/swagger-ui'
 import { jsonSchemaTransform } from 'fastify-type-provider-zod'
 import auth from './lib/auth.js'
 import fastifyCors from '@fastify/cors'
@@ -66,6 +64,8 @@ app.withTypeProvider<ZodTypeProvider>().route({
     return app.swagger();
   },
 }); 
+
+
 
 app.route({
   method: ["GET", "POST"],
