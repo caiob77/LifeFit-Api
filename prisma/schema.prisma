@@ -56,6 +56,7 @@ model WorkoutDay {
   isRest                   Boolean              @default(false)
   weekDay                  WeekDay
   estimatedDurationSeconds Int
+  coverImageUrl            String?
   createdAt                DateTime             @default(now()) @db.Timestamptz
   updatedAt                DateTime             @updatedAt @db.Timestamptz
   workoutExercises         WorkoutExercise[]
@@ -81,7 +82,8 @@ model UserWorkoutSession {
   workoutDayId String
   workoutDay   WorkoutDay @relation(fields: [workoutDayId], references: [id], onDelete: Cascade)
   startAt      DateTime   @db.Timestamptz
-  completedAt  DateTime   @db.Timestamptz
+  completedAt  DateTime?  @db.Timestamptz
+  updatedAt    DateTime   @updatedAt @db.Timestamptz
 }
 
 model Session {
