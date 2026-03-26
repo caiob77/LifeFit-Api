@@ -7,6 +7,10 @@ import { jsonSchemaTransform } from 'fastify-type-provider-zod'
 import auth from './lib/auth.js'
 import fastifyCors from '@fastify/cors'
 import fastifyApiReference from '@scalar/fastify-api-reference'
+import { workoutPlanRoutes } from './routes/workoutPlan.js'
+import { meRoutes } from './routes/me.js'
+import { homeRoutes } from './routes/home.js'
+import { statsRoutes } from './routes/stats.js'
 
 const app = fastify({
   logger: true
@@ -64,6 +68,12 @@ app.withTypeProvider<ZodTypeProvider>().route({
     return app.swagger();
   },
 }); 
+
+
+await app.register(workoutPlanRoutes, { prefix: "/workout-plans" });
+await app.register(homeRoutes, { prefix: "/home" });
+await app.register(meRoutes, { prefix: "/me" });
+await app.register(statsRoutes, { prefix: "/stats" });
 
 
 
