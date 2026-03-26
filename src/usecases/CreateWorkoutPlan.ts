@@ -68,15 +68,15 @@ export class CreateWorkoutPlan {
               name: workoutDay.name,
               weekDay: workoutDay.weekDay,
               isRest: workoutDay.isRest,
-              estimatedDurationInSeconds: workoutDay.estimatedDurationInSeconds,
+              estimatedDurationSeconds: workoutDay.estimatedDurationInSeconds,
               coverImageUrl: workoutDay.coverImageUrl,
-              exercises: {
+              workoutExercises: {
                 create: workoutDay.exercises.map((exercise) => ({
                   name: exercise.name,
                   order: exercise.order,
                   sets: exercise.sets,
                   reps: exercise.reps,
-                  restTimeInSeconds: exercise.restTimeInSeconds,
+                  restTimeSeconds: exercise.restTimeInSeconds,
                 })),
               },
             })),
@@ -88,7 +88,7 @@ export class CreateWorkoutPlan {
         include: {
           workoutDays: {
             include: {
-              exercises: true,
+              workoutExercises: true,
             },
           },
         },
@@ -103,14 +103,14 @@ export class CreateWorkoutPlan {
           name: day.name,
           weekDay: day.weekDay,
           isRest: day.isRest,
-          estimatedDurationInSeconds: day.estimatedDurationInSeconds,
+          estimatedDurationInSeconds: day.estimatedDurationSeconds,
           coverImageUrl: day.coverImageUrl ?? undefined,
-          exercises: day.exercises.map((exercise) => ({
+          exercises: day.workoutExercises.map((exercise) => ({
             order: exercise.order,
             name: exercise.name,
             sets: exercise.sets,
             reps: exercise.reps,
-            restTimeInSeconds: exercise.restTimeInSeconds,
+            restTimeInSeconds: exercise.restTimeSeconds,
           })),
         })),
       };
