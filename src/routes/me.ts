@@ -20,6 +20,7 @@ export const meRoutes = async (app: FastifyInstance) => {
       operationId: "getUserTrainData",
       tags: ["Me"],
       summary: "Get user train data",
+      description: "Retorna os dados físicos do usuário autenticado: peso, altura, idade e percentual de gordura corporal.",
       response: {
         200: UserTrainDataSchema.nullable(),
         401: ErrorSchema,
@@ -61,6 +62,7 @@ export const meRoutes = async (app: FastifyInstance) => {
       operationId: "upsertUserTrainData",
       tags: ["Me"],
       summary: "Upsert user train data",
+      description: "Cria ou atualiza os dados físicos do usuário autenticado (peso, altura, idade e percentual de gordura).",
       body: UpsertUserTrainDataBodySchema,
       response: {
         200: UpsertUserTrainDataSchema,

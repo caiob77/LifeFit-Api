@@ -35,6 +35,7 @@ export const workoutPlanRoutes = async (app: FastifyInstance) => {
       operationId: "listWorkoutPlans",
       tags: ["Workout Plan"],
       summary: "List workout plans",
+      description: "Retorna todos os planos de treino do usuário autenticado. Use o parâmetro `active` para filtrar apenas os planos ativos.",
       querystring: ListWorkoutPlansQuerySchema,
       response: {
         200: ListWorkoutPlansSchema,
@@ -79,6 +80,7 @@ export const workoutPlanRoutes = async (app: FastifyInstance) => {
       operationId: "createWorkoutPlan",
       tags: ["Workout Plan"],
       summary: "Create a workout plan",
+      description: "Cria um novo plano de treino para o usuário autenticado com nome e dias de treino definidos.",
       body: WorkoutPlanSchema.omit({ id: true }),
       response: {
         201: WorkoutPlanSchema,
@@ -129,6 +131,7 @@ export const workoutPlanRoutes = async (app: FastifyInstance) => {
       operationId: "getWorkoutPlan",
       tags: ["Workout Plan"],
       summary: "Get a workout plan",
+      description: "Retorna os detalhes completos de um plano de treino específico, incluindo todos os dias e exercícios cadastrados.",
       params: z.object({
         workoutPlanId: z.uuid(),
       }),
@@ -183,6 +186,7 @@ export const workoutPlanRoutes = async (app: FastifyInstance) => {
       operationId: "getWorkoutDay",
       tags: ["Workout Plan"],
       summary: "Get a workout day",
+      description: "Retorna os detalhes de um dia de treino específico, incluindo exercícios, séries e cargas registradas.",
       params: z.object({
         workoutPlanId: z.uuid(),
         workoutDayId: z.uuid(),
@@ -239,6 +243,7 @@ export const workoutPlanRoutes = async (app: FastifyInstance) => {
       operationId: "startWorkoutSession",
       tags: ["Workout Plan"],
       summary: "Start a workout session",
+      description: "Inicia uma nova sessão de treino para o dia informado. Retorna erro se o plano estiver inativo (422) ou se já houver uma sessão em andamento (409).",
       params: z.object({
         workoutPlanId: z.uuid(),
         workoutDayId: z.uuid(),
@@ -311,6 +316,7 @@ export const workoutPlanRoutes = async (app: FastifyInstance) => {
       operationId: "updateWorkoutSession",
       tags: ["Workout Plan"],
       summary: "Update a workout session",
+      description: "Atualiza uma sessão de treino em andamento, registrando o horário de conclusão via `completedAt`.",
       params: z.object({
         workoutPlanId: z.uuid(),
         workoutDayId: z.uuid(),

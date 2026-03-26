@@ -18,6 +18,7 @@ export const statsRoutes = async (app: FastifyInstance) => {
       operationId: "getStats",
       tags: ["Stats"],
       summary: "Get user workout stats",
+      description: "Retorna as estatísticas de treino do usuário autenticado dentro de um intervalo de datas definido pelos parâmetros `from` e `to`.",
       querystring: StatsQuerySchema,
       response: {
         200: StatsSchema,

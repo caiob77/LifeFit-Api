@@ -16,6 +16,7 @@ export const homeRoutes = async (app: FastifyInstance) => {
       operationId: "getHomeData",
       tags: ["Home"],
       summary: "Get home page data",
+      description: "Retorna os dados da tela inicial para uma data específica, incluindo o treino programado e o resumo de progresso do usuário.",
       params: z.object({
         date: z.iso.date(),
       }),
