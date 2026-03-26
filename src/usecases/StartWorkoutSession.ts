@@ -41,7 +41,7 @@ import {
         throw new NotFoundError("Workout day not found");
       }
   
-      const existingSession = await prisma.workoutSession.findFirst({
+      const existingSession = await prisma.userWorkoutSession.findFirst({
         where: { workoutDayId: dto.workoutDayId },
       });
   
@@ -51,10 +51,11 @@ import {
         );
       }
   
-      const session = await prisma.workoutSession.create({
+      const session = await prisma.userWorkoutSession.create({
         data: {
+          userId: dto.userId,
           workoutDayId: dto.workoutDayId,
-          startedAt: new Date(),
+          startAt: new Date(),
         },
       });
   
