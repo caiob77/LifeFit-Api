@@ -72,7 +72,7 @@ export class GetHomeData {
         workoutDay: {
           workoutPlanId: workoutPlan?.id,
         },
-        startedAt: {
+        startAt: {
           gte: weekStart.toDate(),
           lte: weekEnd.toDate(),
         },
