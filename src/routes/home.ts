@@ -4,7 +4,7 @@ import { ZodTypeProvider } from "fastify-type-provider-zod";
 import z from "zod";
 
 import { NotFoundError } from "../errors/index.js";
-import auth from "../lib/auth.js";
+import { auth } from "../lib/auth.js";
 import { ErrorSchema, HomeDataSchema } from "../schemas/index.js";
 import { GetHomeData } from "../usecases/GetHomeData.js";
 

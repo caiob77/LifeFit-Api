@@ -8,7 +8,7 @@ import {
   SessionAlreadyStartedError,
   WorkoutPlanNotActiveError,
 } from "../errors/index.js";
-import auth from "../lib/auth.js";
+import { auth } from "../lib/auth.js";
 import {
   ErrorSchema,
   GetWorkoutDaySchema,

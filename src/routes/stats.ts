@@ -2,7 +2,7 @@ import { fromNodeHeaders } from "better-auth/node";
 import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { NotFoundError } from "../errors/index.js";
-import auth from "../lib/auth.js";
+import { auth } from "../lib/auth.js";
 import {
   ErrorSchema,
   StatsQuerySchema,
