@@ -4,17 +4,34 @@ import fastify from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import fastifySwagger from '@fastify/swagger'
 import { jsonSchemaTransform } from 'fastify-type-provider-zod'
-import auth from './lib/auth.js'
+import { auth } from './lib/auth.js'
 import fastifyCors from '@fastify/cors'
 import fastifyApiReference from '@scalar/fastify-api-reference'
 import { workoutPlanRoutes } from './routes/workoutPlan.js'
 import { meRoutes } from './routes/me.js'
 import { homeRoutes } from './routes/home.js'
 import { statsRoutes } from './routes/stats.js'
+import { aiRoutes } from './routes/ai.js'
+import { env } from './lib/env.js'
+
+
+const envToLogger = {
+  development: {
+    transport: {
+      target: "pino-pretty",
+      options: {
+        translateTime: "HH:MM:ss Z",
+        ignore: "pid,hostname",
+      },
+    },
+  },
+  production: true,
+  test: false,
+};
 
 const app = fastify({
-  logger: true
-})
+  logger: envToLogger[env.NODE_ENV],
+});
 
 app.setSerializerCompiler(serializerCompiler)
 app.setValidatorCompiler(validatorCompiler)
@@ -28,7 +45,7 @@ await app.register(fastifySwagger, {
     },
     servers: [
       {
-        url: 'http://localhost:8081',
+        url: env.API_BASE_URL,
       },
     ],
   },
@@ -36,9 +53,9 @@ await app.register(fastifySwagger, {
 })
 
 await app.register(fastifyCors, {
-  origin: "http://localhost:3000",
+  origin: [env.WEB_APP_BASE_URL],
   credentials: true,
-})
+});
 
 await app.register(fastifyApiReference, {
   routePrefix: '/docs',
@@ -74,12 +91,14 @@ await app.register(workoutPlanRoutes, { prefix: "/workout-plans" });
 await app.register(homeRoutes, { prefix: "/home" });
 await app.register(meRoutes, { prefix: "/me" });
 await app.register(statsRoutes, { prefix: "/stats" });
+await app.register(aiRoutes, { prefix: "/ai" });
 
 
 
 app.route({
   method: ["GET", "POST"],
   url: "/api/auth/*",
+  schema: { hide: true },
   async handler(request, reply) {
     try {
       // Construct request URL
