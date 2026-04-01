@@ -11,7 +11,7 @@ interface InputDto {
 
 interface OutputDto {
   id: string;
-  startedAt: string;
+  startAt: string;
   completedAt: string;
 }
 
@@ -48,7 +48,7 @@ export class UpdateWorkoutSession {
 
     return {
       id: updatedSession.id,
-      startedAt: updatedSession.startAt.toISOString(),
+      startAt: updatedSession.startAt.toISOString(),
       completedAt: updatedSession.completedAt!.toISOString(),
     };
   }

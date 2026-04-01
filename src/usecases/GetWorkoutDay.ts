@@ -32,7 +32,7 @@ interface OutputDto {
   sessions: Array<{
     id: string;
     workoutDayId: string;
-    startedAt?: string;
+    startAt?: string;
     completedAt?: string;
   }>;
 }

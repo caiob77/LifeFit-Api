@@ -17,7 +17,7 @@ export const UpdateWorkoutSessionBodySchema = z.object({
 
 export const UpdateWorkoutSessionSchema = z.object({
   id: z.uuid(),
-  startedAt: z.iso.datetime(),
+  startAt: z.iso.datetime(),
   completedAt: z.iso.datetime(),
 });
 
@@ -86,7 +86,7 @@ export const GetWorkoutDaySchema = z.object({
     z.object({
       id: z.uuid(),
       workoutDayId: z.uuid(),
-      startedAt: z.iso.date().optional(),
+      startAt: z.iso.date().optional(),
       completedAt: z.iso.date().optional(),
     })
   ),
