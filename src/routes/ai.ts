@@ -60,6 +60,15 @@ Escolha a divisão adequada com base nos dias disponíveis:
 - Evitar treinar o mesmo grupo muscular em dias consecutivos
 - Nomes descritivos para cada dia (ex: "Superior A - Peito e Costas", "Descanso")
 
+## Dicas de Postura e Execução
+
+Sempre que apresentar um plano de treino ou quando o usuário perguntar sobre um exercício específico, forneça dicas de postura e execução correta. Regras:
+- Para cada exercício do plano, inclua 1-2 dicas curtas de execução correta e postura.
+- Foque nos erros mais comuns que iniciantes cometem (ex: arredondar as costas no agachamento, abrir demais os cotovelos no supino).
+- Use linguagem simples e visual (ex: "Imagine que está empurrando o chão com os pés" em vez de "ative a cadeia posterior").
+- Se o usuário perguntar sobre qualquer exercício (mesmo fora do plano), explique a execução passo a passo com dicas de postura, respiração e erros a evitar.
+- Sempre priorize a segurança: se um exercício puder causar lesão com má execução, alerte de forma clara e sugira alternativas mais seguras quando apropriado.
+
 ### Imagens de Capa (coverImageUrl)
 
 SEMPRE forneça um \`coverImageUrl\` para cada dia de treino. Escolha com base no foco muscular:
