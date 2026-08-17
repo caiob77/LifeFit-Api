@@ -16,12 +16,13 @@ Backend da aplicação **Fit.ai**: plataforma de fitness com planos de treino pe
 | IA | Vercel AI SDK + Gemini 2.5 Flash |
 | Documentação | Swagger + Scalar (`/docs`) |
 | Validação | Zod |
+| Proxy reverso | Nginx (produção) |
 
 ---
 
 ## Funcionalidades
 
-- Autenticação via Google OAuth com suporte a cookies cross-subdomain
+- Autenticação via Google OAuth
 - CRUD de planos de treino e dias com exercícios (séries, repetições, descanso)
 - Sessões de treino por dia (iniciar e concluir)
 - Home por data: treino do dia, streak e consistência
@@ -57,17 +58,16 @@ GOOGLE_GENERATIVE_AI_API_KEY=
 OPENAI_API_KEY=        # opcional
 
 WEB_APP_BASE_URL=http://localhost:3000
-SUBDOMAIN=             # usado em produção para cookies cross-subdomain (.{SUBDOMAIN}.com.br)
 ```
 
 ---
 
-## Como rodar
+## Como rodar (desenvolvimento)
 
 ### 1. Subir o banco de dados
 
 ```bash
-docker compose up -d
+docker compose up postgres -d
 ```
 
 ### 2. Instalar dependências
@@ -88,25 +88,76 @@ pnpx prisma migrate deploy
 pnpm dev
 ```
 
-### 5. Build e produção
-
-```bash
-pnpm build
-pnpm start
-```
-
 ---
 
-## Docker (API)
+## Deploy (produção)
 
-O `dockerfile` usa build multi-stage. Para construir e rodar a imagem da API:
+A stack de produção usa Nginx como reverse proxy para servir API e frontend no **mesmo domínio**, garantindo que os cookies do better-auth sejam compartilhados sem configurações extras.
 
-```bash
-docker build -t lifefit-api .
-docker run -p 8081:8081 --env-file .env lifefit-api
+```
+https://seuapp.duckdns.org/api/auth/*    → API (porta 8081)
+https://seuapp.duckdns.org/workout-plans → API (porta 8081)
+https://seuapp.duckdns.org/me, /stats…   → API (porta 8081)
+https://seuapp.duckdns.org/              → Frontend (porta 3000)
 ```
 
-> O `docker-compose.yml` sobe apenas o PostgreSQL. Para orquestrar API + banco juntos, adicione o serviço da API ao compose.
+### Opção gratuita: Oracle OCI Free Tier + DuckDNS
+
+| Item | Custo |
+|---|---|
+| Oracle OCI VM (ARM A1) + IP público | Grátis |
+| DuckDNS subdomain | Grátis |
+| Let's Encrypt SSL | Grátis |
+| **Total** | **R$0** |
+
+### Passo a passo
+
+#### 1. VM no OCI
+- Shape: **VM.Standard.A1.Flex** (ARM, Free Tier)
+- OS: Ubuntu 22.04
+- Anotar o IP público
+
+#### 2. Abrir portas no OCI
+Security List → adicionar regras de entrada para portas **80** e **443**.
+
+No Ubuntu:
+```bash
+sudo iptables -I INPUT -p tcp --dport 80 -j ACCEPT
+sudo iptables -I INPUT -p tcp --dport 443 -j ACCEPT
+sudo apt install iptables-persistent && sudo netfilter-persistent save
+```
+
+#### 3. Domínio grátis — DuckDNS
+1. Acesse [duckdns.org](https://www.duckdns.org) e crie `seuapp.duckdns.org`
+2. Aponte para o IP público da VM
+
+#### 4. Instalar Docker
+```bash
+curl -fsSL https://get.docker.com | sh
+sudo usermod -aG docker $USER
+```
+
+#### 5. Variáveis de ambiente (produção)
+```env
+API_BASE_URL=https://seuapp.duckdns.org
+WEB_APP_BASE_URL=https://seuapp.duckdns.org
+```
+
+#### 6. Subir os serviços
+Adicione o serviço do frontend no `docker-compose.yml` e suba tudo:
+```bash
+docker compose up -d --build
+```
+
+#### 7. SSL grátis — Let's Encrypt
+```bash
+sudo apt install certbot python3-certbot-nginx
+sudo certbot --nginx -d seuapp.duckdns.org
+```
+
+O certbot configura HTTPS automaticamente e renova o certificado via cron.
+
+> O arquivo `nginx/nginx.conf` já está pré-configurado com o roteamento correto.
 
 ---
 
@@ -142,6 +193,8 @@ src/
     ├── auth.ts           # Configuração do better-auth
     ├── db.ts             # Instância do Prisma
     └── env.ts            # Validação de variáveis de ambiente
+nginx/
+└── nginx.conf            # Configuração do reverse proxy
 prisma/
 └── schema.prisma         # Schema do banco de dados
 ```
@@ -155,8 +208,11 @@ O frontend (Next.js 16 + React 19 + Tailwind CSS 4) está em repositório separa
 Variáveis necessárias no frontend:
 
 ```env
+# desenvolvimento
 NEXT_PUBLIC_API_URL=http://localhost:8081
-NEXT_PUBLIC_BASE_URL=http://localhost:3000
+
+# produção (mesmo domínio via Nginx)
+NEXT_PUBLIC_API_URL=https://seuapp.duckdns.org
 ```
 
 O cliente HTTP é gerado automaticamente via **Orval** a partir do `/swagger.json` da API.

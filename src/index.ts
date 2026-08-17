@@ -31,6 +31,7 @@ const envToLogger = {
 
 const app = fastify({
   logger: envToLogger[env.NODE_ENV],
+  trustProxy: true,
 });
 
 app.setSerializerCompiler(serializerCompiler)
@@ -101,8 +102,8 @@ app.route({
   schema: { hide: true },
   async handler(request, reply) {
     try {
-      // Construct request URL
-      const url = new URL(request.url, `http://${request.headers.host}`);
+      // Construct request URL — usa o protocolo real (https quando atrás do Nginx)
+      const url = new URL(request.url, `${request.protocol}://${request.headers.host}`);
       
       // Convert Fastify headers to standard Headers object
       const headers = new Headers();

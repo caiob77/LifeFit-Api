@@ -19,11 +19,4 @@ export const auth = betterAuth({
     provider: "postgresql",
   }),
   plugins: [openAPI()],
-  advanced: {
-    crossSubDomainCookies: {
-      enabled: true,
-      domain:
-        env.NODE_ENV === "production" ? `.${env.SUBDOMAIN}.com.br` : undefined,
-    },
-  },
 });

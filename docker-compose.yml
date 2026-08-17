@@ -5,13 +5,39 @@ services:
     container_name: PostgresLifeFit
     restart: always
     environment:
-      POSTGRES_USER: admin 
+      POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin123
       POSTGRES_DB: life_fit
     ports:
-      - "5432:5432"
+      - "5432:5432"  # remova em produção se não precisar de acesso externo ao banco
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: .
+      dockerfile: dockerfile
+      target: production
+    container_name: LifeFitApi
+    restart: always
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://admin:admin123@postgres:5432/life_fit
+    depends_on:
+      - postgres
+
+  nginx:
+    image: nginx:alpine
+    container_name: LifeFitNginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - api
 
 volumes:
   postgres_data:

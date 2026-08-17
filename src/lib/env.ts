@@ -12,7 +12,6 @@ const envSchema = z.object({
   GOOGLE_GENERATIVE_AI_API_KEY: z.string(),
   OPENAI_API_KEY: z.string().optional(),
   WEB_APP_BASE_URL: z.url(),
-  SUBDOMAIN: z.string(),
   NODE_ENV: z
     .enum(["development", "production", "test"])
     .default("development"),
